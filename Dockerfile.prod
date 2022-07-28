@@ -1,0 +1,18 @@
+ARG GO_BUILD_NAME=go-lang-docker-challenge
+
+# Build step
+FROM golang AS build
+
+WORKDIR /usr/src/app
+
+COPY go.mod *.go  ./
+
+RUN go build -o ${GO_BUILD_NAME} .
+
+# Final step
+FROM scratch
+WORKDIR /
+
+COPY --from=build /usr/src/app/${GO_BUILD_NAME} /${GO_BUILD_NAME}
+
+CMD [ "./go-lang-docker-challenge" ]
